@@ -4,18 +4,28 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+
 jobs:
   njsscan:
     runs-on: ubuntu-latest
     name: njsscan check
+    # Thêm quyền để workflow token có thể upload SARIF
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
     steps:
-    - uses: actions/checkout@v4
-    - name: nodejsscan scan
-      id: njsscan
-      uses: ajinabraham/njsscan-action@v5
-      with:
-        args: '. --sarif --output results.sarif || true'
-    - name: upload report to github code scanning
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: results.sarif
+      - uses: actions/checkout@v4
+      
+      - name: nodejsscan scan
+        id: njsscan
+        uses: ajinabraham/njsscan-action@v5
+        with:
+          args: '. --sarif --output results.sarif || true'
+      
+      # Đổi từ v2 -> v3
+      - name: upload report to github code scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
