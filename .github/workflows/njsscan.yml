@@ -40,3 +40,20 @@ jobs:
       uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: results.sarif
+  scan:
+    permissions: write-all
+    name: npm audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: install dependencies
+        run: npm ci
+      - uses: oke-py/npm-audit-action@v2
+        with:
+          audit_level: moderate
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_labels: vulnerability,test
+          dedupe_issues: true
+
+
+
