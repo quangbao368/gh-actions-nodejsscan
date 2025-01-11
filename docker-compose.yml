@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  myapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: myapp:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+      - mysql
+
+  mongodb:
+    build:
+      context: .
+      dockerfile: mongodb.Dockerfile
+    image: mymongo:latest
+    ports:
+      - "27017:27017"
+
+  mysql:
+    build:
+      context: .
+      dockerfile: mysql.Dockerfile
+    image: mymysql:latest
+    ports:
+      - "3306:3306"
